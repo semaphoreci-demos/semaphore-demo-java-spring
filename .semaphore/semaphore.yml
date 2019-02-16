@@ -1,0 +1,41 @@
+version: v1.0
+name: First pipeline example
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+
+  - name: "Test"
+    task:
+      jobs:
+      - name: Tests
+        commands:
+          - checkout
+          - ./mvnw test
+      - name: Performance tests
+        commands:
+          - checkout
+          - ./mvnw spring-boot:run &
+          - sleep 30
+          - ./mvnw jmeter:jmeter
+
+  - name: "Build"
+    task:
+      env_vars:
+        - name: ENVIRONMENT
+          value: "dev"
+      secrets:
+      - name: docker-hub
+      jobs:
+      - name: Build
+        commands:
+          - checkout
+          - echo $REVISION $ENVIRONMENT
+          - ./mvnw clean install -Dmaven.test.skip=true
+          - echo $DOCKER_PASSWORD | docker login  --username "$DOCKER_USERNAME" --password-stdin
+          - docker build --build-arg ENVIRONMENT="${ENVIRONMENT}" -t "${DOCKER_USERNAME}/spring-pipeline-test:latest" .
+          - docker push "$DOCKER_USERNAME"/spring-pipeline-test:latest
+#          - docker build --build-arg ENVIRONMENT="${ENVIRONMENT}" -t "${DOCKER_USERNAME}/spring-pipeline-test:${REVISION}" .
+

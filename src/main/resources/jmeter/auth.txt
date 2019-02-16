@@ -1,0 +1,2 @@
+# JMeter generated Authorization file
+http://localhost:8080/admin/home	test@email.com				BASIC_DIGEST
