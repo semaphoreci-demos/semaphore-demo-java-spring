@@ -27,13 +27,25 @@ At this point the pipeline should be functional, and after pushing a new commit 
 
 ### Build configuration
 
-This project is set up using `maven`
+This project is set up using `maven`, maven configuration can be found at `pom.xml`
 
 ##### Running the project
   `./mvnw spring-boot:run`
 
 ##### Running tests
-  `./mvnw clean verify`
+Tests are separated into two classpaths: `src/test` for unit tests, and `src/it` for integration tests. 
+
+To run unit tests:
+
+  `./mvnw clean test`
+  
+To run integration tests
+
+   `./mvnw clean test -Pintegration-testing`
+   
+To run performance tests 
+
+   `./mvnw clean jmeter:jmeter`
   
 ##### JMeter gui
   `./mvnw jmeter:gui`
