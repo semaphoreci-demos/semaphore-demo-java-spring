@@ -31,7 +31,7 @@ blocks:
           - cache store spring-pipeline-$SEMAPHORE_GIT_BRANCH-$(checksum target/spring-pipeline-demo.jar) target/spring-pipeline-demo.jar
 
 
-  - name: "Build"
+  - name: "Dockerize"
     task:
       env_vars:
         - name: ENVIRONMENT
@@ -39,7 +39,7 @@ blocks:
       secrets:
       - name: docker-hub
       jobs:
-      - name: Build
+      - name: Build and deploy docker container
         commands:
           - checkout
           - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$(checksum target/spring-pipeline-demo.jar)
