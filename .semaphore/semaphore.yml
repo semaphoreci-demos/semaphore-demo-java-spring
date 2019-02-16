@@ -14,7 +14,7 @@ blocks:
         commands:
           - checkout
           - ./mvnw clean install -Dmaven.test.skip=true
-          - cache store spring-pipeline-$SEMAPHORE_GIT_BRANCH-$(checksum target/spring-pipeline-demo.jar) target/spring-pipeline-demo.jar
+          - cache store spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_BUILD_NUMBER target/spring-pipeline-demo.jar
 
   - name: "Test"
     task:
@@ -26,9 +26,9 @@ blocks:
       - name: Performance tests
         commands:
           - checkout
-          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$(checksum target/spring-pipeline-demo.jar)
+          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_BUILD_NUMBER
           - ./mvnw spring-boot:run &
-          - sleep 30
+          - sleep 20
           - ./mvnw jmeter:jmeter
 
   - name: "Dockerize"
@@ -42,7 +42,7 @@ blocks:
       - name: Build and deploy docker container
         commands:
           - checkout
-          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$(checksum target/spring-pipeline-demo.jar)
+          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_BUILD_NUMBER
           - ./mvnw clean install -Dmaven.test.skip=true
           - echo $DOCKER_PASSWORD | docker login  --username "$DOCKER_USERNAME" --password-stdin
           - docker build --build-arg ENVIRONMENT="${ENVIRONMENT}" -t "${DOCKER_USERNAME}/spring-pipeline-test:latest" .
