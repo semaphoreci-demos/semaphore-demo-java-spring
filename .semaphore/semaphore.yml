@@ -7,6 +7,15 @@ agent:
 
 blocks:
 
+  - name: "Build"
+    task:
+      jobs:
+      - name: Build
+        commands:
+          - checkout
+          - ./mvnw clean install -Dmaven.test.skip=true
+          - cache store spring-pipeline-$SEMAPHORE_GIT_BRANCH-$(checksum target/spring-pipeline-demo.jar) target/spring-pipeline-demo.jar
+
   - name: "Test"
     task:
       jobs:
@@ -17,19 +26,10 @@ blocks:
       - name: Performance tests
         commands:
           - checkout
+          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$(checksum target/spring-pipeline-demo.jar)
           - ./mvnw spring-boot:run &
           - sleep 30
           - ./mvnw jmeter:jmeter
-
-  - name: "Build"
-    task:
-      jobs:
-      - name: Build
-        commands:
-          - checkout
-          - ./mvnw clean install -Dmaven.test.skip=true
-          - cache store spring-pipeline-$SEMAPHORE_GIT_BRANCH-$(checksum target/spring-pipeline-demo.jar) target/spring-pipeline-demo.jar
-
 
   - name: "Dockerize"
     task:
