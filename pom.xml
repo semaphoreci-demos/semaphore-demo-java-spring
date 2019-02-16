@@ -16,6 +16,7 @@
 	<packaging>jar</packaging>
 
 	<properties>
+		<myTestSourceDirectory>${project.basedir}/src/test/java</myTestSourceDirectory>
 		<java.version>1.8</java.version>
 	</properties>
 
@@ -66,6 +67,7 @@
 	</dependencies>
 
 	<build>
+		<testSourceDirectory>${myTestSourceDirectory}</testSourceDirectory>
 		<finalName>spring-pipeline-demo</finalName>
 		<plugins>
 			<plugin>
@@ -95,5 +97,15 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>integration-testing</id>
+			<properties>
+				<maven.test.skip>false</maven.test.skip>
+				<myTestSourceDirectory>${project.basedir}/src/it/java</myTestSourceDirectory>
+			</properties>
+		</profile>
+	</profiles>
 
 </project>

@@ -19,10 +19,16 @@ blocks:
   - name: "Test"
     task:
       jobs:
-      - name: Tests
+      - name: Unit tests
         commands:
           - checkout
+          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_BUILD_NUMBER
           - ./mvnw test
+      - name: Integration tests
+        commands:
+          - checkout
+          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_BUILD_NUMBER
+          - ./mvnw test -Pintegration-testing
       - name: Performance tests
         commands:
           - checkout
