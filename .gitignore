@@ -187,5 +187,3 @@ gradle-app.setting
 # End of https://www.gitignore.io/api/maven,gradle,eclipse,intellij
 
 /testResults
-
-docker-hub-secret.yml
