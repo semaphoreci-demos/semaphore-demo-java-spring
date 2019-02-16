@@ -23,6 +23,16 @@ blocks:
 
   - name: "Build"
     task:
+      jobs:
+      - name: Build
+        commands:
+          - checkout
+          - ./mvnw clean install -Dmaven.test.skip=true
+          - cache store spring-pipeline-$SEMAPHORE_GIT_BRANCH-$(checksum target/spring-pipeline-demo.jar) target/spring-pipeline-demo.jar
+
+
+  - name: "Build"
+    task:
       env_vars:
         - name: ENVIRONMENT
           value: "dev"
@@ -32,10 +42,8 @@ blocks:
       - name: Build
         commands:
           - checkout
-          - echo $REVISION $ENVIRONMENT
+          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$(checksum target/spring-pipeline-demo.jar)
           - ./mvnw clean install -Dmaven.test.skip=true
           - echo $DOCKER_PASSWORD | docker login  --username "$DOCKER_USERNAME" --password-stdin
           - docker build --build-arg ENVIRONMENT="${ENVIRONMENT}" -t "${DOCKER_USERNAME}/spring-pipeline-test:latest" .
           - docker push "$DOCKER_USERNAME"/spring-pipeline-test:latest
-#          - docker build --build-arg ENVIRONMENT="${ENVIRONMENT}" -t "${DOCKER_USERNAME}/spring-pipeline-test:${REVISION}" .
-
