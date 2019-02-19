@@ -12,6 +12,7 @@ blocks:
       jobs:
       - name: Build
         commands:
+          - echo $REVISION
           - checkout
           - cache restore spring-pipeline
           - ./mvnw install -Dmaven.test.skip=true
