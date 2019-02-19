@@ -14,7 +14,7 @@ blocks:
         commands:
           - checkout
           - cache restore spring-pipeline
-          - ./mvnw package -Dmaven.test.skip=true
+          - ./mvnw package jmeter:configure -Dmaven.test.skip=true
           - cache store spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_WORKFLOW_ID target
           - cache store spring-pipeline target
 
@@ -44,6 +44,7 @@ blocks:
           - java -jar target/spring-pipeline-demo.jar > /dev/null &
           - sleep 20
           - ./mvnw jmeter:jmeter
+          - ./mvnw jmeter:results
 
 
 promotions:
