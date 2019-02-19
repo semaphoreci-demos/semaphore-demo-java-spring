@@ -39,19 +39,20 @@ blocks:
           - sleep 20
           - ./mvnw jmeter:jmeter
 
-  - name: "Dockerize"
+  - name: "Performance tests"
     task:
-      env_vars:
-        - name: ENVIRONMENT
-          value: "dev"
-      secrets:
-      - name: docker-hub
       jobs:
-      - name: Build and deploy docker container
+      - name: Benchmark
         commands:
           - checkout
           - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_BUILD_NUMBER
-          - ./mvnw clean install -Dmaven.test.skip=true
-          - echo $DOCKER_PASSWORD | docker login  --username "$DOCKER_USERNAME" --password-stdin
-          - docker build --build-arg ENVIRONMENT="${ENVIRONMENT}" -t "${DOCKER_USERNAME}/spring-pipeline-test:latest" .
-          - docker push "$DOCKER_USERNAME"/spring-pipeline-test:latest
+          - ./mvnw spring-boot:run &
+          - sleep 20
+          - ./mvnw jmeter:jmeter
+
+
+promotions:
+  - name: Dockerize
+    pipeline_file: docker-build.yml
+    auto_promote_on:
+      - result: passed
