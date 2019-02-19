@@ -12,25 +12,24 @@ blocks:
       jobs:
       - name: Build
         commands:
-          - echo $SEMAPHORE_JOB_ID
           - checkout
           - cache restore spring-pipeline
           - ./mvnw install -Dmaven.test.skip=true
-          - cache store spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_BUILD_NUMBER target/spring-pipeline-demo.jar
-          - cache store spring-pipeline target/spring-pipeline-demo.jar
+          - cache store spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_JOB_ID target
+          - cache store spring-pipeline target
 
   - name: "Test"
     task:
+      prologue:
+        commands:
+          - checkout
+          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_JOB_ID,spring-pipeline
       jobs:
       - name: Unit tests
         commands:
-          - checkout
-          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_BUILD_NUMBER
           - ./mvnw test
       - name: Integration tests
         commands:
-          - checkout
-          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_BUILD_NUMBER
           - ./mvnw test -Pintegration-testing
 
   - name: "Performance tests"
@@ -39,7 +38,7 @@ blocks:
       - name: Benchmark
         commands:
           - checkout
-          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_BUILD_NUMBER
+          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_JOB_ID,spring-pipeline
           - ./mvnw spring-boot:run &
           - sleep 20
           - ./mvnw jmeter:jmeter
