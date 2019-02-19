@@ -58,7 +58,7 @@ To set up this pipeline on your semaphore account :
   
 At this point the pipeline should be functional, and after pushing a new commit to master a build should initiate on _semaphore_
 
-![alt text](assets/pipeline.png)
+![alt text](assets/pipeline-result.png)
 
 -------------------------------
 
