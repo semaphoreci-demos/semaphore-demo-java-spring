@@ -12,8 +12,8 @@ blocks:
       jobs:
       - name: Build
         commands:
+          - echo $SEMAPHORE_JOB_ID
           - checkout
-          - echo $REVISION $BRANCH_NAME
           - cache restore spring-pipeline
           - ./mvnw install -Dmaven.test.skip=true
           - cache store spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_BUILD_NUMBER target/spring-pipeline-demo.jar
