@@ -39,7 +39,9 @@ blocks:
         commands:
           - checkout
           - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_WORKFLOW_ID,spring-pipeline
-          - ./mvnw spring-boot:run &
+#          - ./mvnw spring-boot:run &
+          - java -version > /dev/null &
+          - java -jar target/spring-pipeline-demo.jar &
           - sleep 20
           - ./mvnw jmeter:jmeter
 
