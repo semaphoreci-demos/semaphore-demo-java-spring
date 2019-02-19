@@ -17,7 +17,7 @@ blocks:
       - name: Build and deploy docker container
         commands:
           - checkout
-          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_JOB_ID,spring-pipeline
+          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_WORKFLOW_ID,spring-pipeline
           - ./mvnw install -Dmaven.test.skip=true
           - echo $DOCKER_PASSWORD | docker login  --username "$DOCKER_USERNAME" --password-stdin
           - docker build --build-arg ENVIRONMENT="${ENVIRONMENT}" -t "${DOCKER_USERNAME}/spring-pipeline-test:latest" .
