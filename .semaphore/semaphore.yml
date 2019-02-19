@@ -31,13 +31,6 @@ blocks:
           - checkout
           - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_BUILD_NUMBER
           - ./mvnw test -Pintegration-testing
-      - name: Performance tests
-        commands:
-          - checkout
-          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_BUILD_NUMBER
-          - ./mvnw spring-boot:run &
-          - sleep 20
-          - ./mvnw jmeter:jmeter
 
   - name: "Performance tests"
     task:
