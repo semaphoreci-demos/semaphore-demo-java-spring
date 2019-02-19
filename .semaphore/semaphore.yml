@@ -13,8 +13,10 @@ blocks:
       - name: Build
         commands:
           - checkout
-          - ./mvnw clean install -Dmaven.test.skip=true
+          - cache restore spring-pipeline
+          - ./mvnw install -Dmaven.test.skip=true
           - cache store spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_BUILD_NUMBER target/spring-pipeline-demo.jar
+          - cache store spring-pipeline target/spring-pipeline-demo.jar
 
   - name: "Test"
     task:
