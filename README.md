@@ -28,7 +28,7 @@ This is a simple hello world of spring boot web application.
 
   Tests are separated into two classpaths (in order to run them as separate tasks): 
    - [src/test](src/test) holds the unit tests
-   - [src/test](src/it) holds the integration tests, in this case repository and rest endpoint tests.
+   - [src/it](src/it) holds the integration tests, in this case repository and rest endpoint tests.
 
 --------------------------------
 
