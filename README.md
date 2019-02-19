@@ -12,8 +12,7 @@ This is a simple hello world of spring boot web application.
 ##### Endpoints:
  - `"/admin/home"` a secured endpoint that returns a webpage in a form of `text/html`, generated with thymeleaf. [AdminController](src/main/java/com/example/springpipelinedemo/controller/AdminController.java)
  - `"/login"` standard spring login endpoint 
- - `"/logout"` rest endpoint, ends user session, redirects to `"/login"`
- - `"/logout"` rest endpoint, ends user session, redirects to `"/login"`
+ - `"/logout"` rest endpoint, ends user session, redirects to `"/login"` 
  - `"/users/signup"` rest endpoint, adds a new user to the system. [UserController](src/main/java/com/example/springpipelinedemo/controller/UserController.java)
 
 ##### Persistence:
