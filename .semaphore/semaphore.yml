@@ -14,7 +14,7 @@ blocks:
         commands:
           - checkout
           - cache restore spring-pipeline
-          - ./mvnw install -Dmaven.test.skip=true
+          - ./mvnw package -Dmaven.test.skip=true
           - cache store spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_WORKFLOW_ID target
           - cache store spring-pipeline target
 
