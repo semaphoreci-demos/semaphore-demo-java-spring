@@ -9,42 +9,59 @@ blocks:
 
   - name: "Build"
     task:
-      jobs:
-      - name: Build
-        commands:
-          - checkout
-          - cache restore spring-pipeline
-          - ./mvnw package jmeter:configure -Dmaven.test.skip=true
-          - cache store spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_WORKFLOW_ID target
-          - cache store spring-pipeline target
-
-  - name: "Test"
-    task:
+      env_vars:
+        - name: MAVEN_OPTS
+          value: "-Dmaven.repo.local=.m2"
       prologue:
         commands:
           - checkout
-          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_WORKFLOW_ID,spring-pipeline
+          - cache restore spring-pipeline-maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml),spring-pipeline-maven-$SEMAPHORE_GIT_BRANCH,spring-pipeline-maven
+      jobs:
+      - name: Build
+        commands:
+          - mvn -q package jmeter:configure -Dmaven.test.skip=true
+          - cache store spring-pipeline-build-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml) target
+          - cache store spring-pipeline-maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml) .m2
+
+  - name: "Test"
+    task:
+      env_vars:
+        - name: MAVEN_OPTS
+          value: "-Dmaven.repo.local=.m2"
+      prologue:
+        commands:
+          - checkout
+          - cache restore spring-pipeline-build-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml),spring-pipeline-build-$SEMAPHORE_GIT_BRANCH,spring-pipeline-build
+          - cache restore spring-pipeline-maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml),spring-pipeline-maven-$SEMAPHORE_GIT_BRANCH,spring-pipeline-maven
+          - mvn -q test-compile -Dmaven.test.skip=true
       jobs:
       - name: Unit tests
         commands:
-          - ./mvnw test
+          - mvn test
       - name: Integration tests
         commands:
-          - ./mvnw test -Pintegration-testing
+          - mvn test -Pintegration-testing
 
   - name: "Performance tests"
     task:
+      env_vars:
+        - name: MAVEN_OPTS
+          value: "-Dmaven.repo.local=.m2"
+      prologue:
+        commands:
+          - checkout
+          - cache restore spring-pipeline-build-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml),spring-pipeline-build-$SEMAPHORE_GIT_BRANCH,spring-pipeline-build
+          - cache restore spring-pipeline-maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml),spring-pipeline-maven-$SEMAPHORE_GIT_BRANCH,spring-pipeline-maven
       jobs:
       - name: Benchmark
         commands:
-          - checkout
-          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_WORKFLOW_ID,spring-pipeline
-#          - ./mvnw spring-boot:run &
           - java -version
+#          Run application in detached mode
           - java -jar target/spring-pipeline-demo.jar > /dev/null &
+#          Wait for the spring boot application to boot
           - sleep 20
-          - ./mvnw jmeter:jmeter
-          - ./mvnw jmeter:results
+          - mvn -q jmeter:jmeter
+          - mvn jmeter:results
 
 
 promotions:

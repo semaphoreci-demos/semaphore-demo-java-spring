@@ -9,16 +9,21 @@ blocks:
   - name: "Build"
     task:
       env_vars:
+        - name: MAVEN_OPTS
+          value: "-Dmaven.repo.local=.m2"
         - name: ENVIRONMENT
           value: "dev"
       secrets:
       - name: docker-hub
+      prologue:
+        commands:
+          - checkout
+          - cache restore spring-pipeline-build-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml),spring-pipeline-build-$SEMAPHORE_GIT_BRANCH,spring-pipeline-build
+          - cache restore spring-pipeline-maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml),spring-pipeline-maven-$SEMAPHORE_GIT_BRANCH,spring-pipeline-maven
       jobs:
       - name: Build and deploy docker container
         commands:
-          - checkout
-          - cache restore spring-pipeline-$SEMAPHORE_GIT_BRANCH-$SEMAPHORE_WORKFLOW_ID,spring-pipeline
-          - ./mvnw package -Dmaven.test.skip=true
+          - mvn -q package -Dmaven.test.skip=true
           - echo $DOCKER_PASSWORD | docker login  --username "$DOCKER_USERNAME" --password-stdin
           - docker build --build-arg ENVIRONMENT="${ENVIRONMENT}" -t "${DOCKER_USERNAME}/spring-pipeline-test:latest" .
           - docker push "$DOCKER_USERNAME"/spring-pipeline-test:latest
