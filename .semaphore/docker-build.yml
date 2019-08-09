@@ -28,7 +28,7 @@ blocks:
         commands:
           - checkout
           - cache restore spring-pipeline-build-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml),spring-pipeline-build-$SEMAPHORE_GIT_BRANCH,spring-pipeline-build
-          - cache restore spring-pipeline-maven-$SEMAPHORE_GIT_BRANCH-$(checksum pom.xml),spring-pipeline-maven-$SEMAPHORE_GIT_BRANCH,spring-pipeline-maven
+          - cache restore
       jobs:
       - name: Build and deploy docker container
         commands:
