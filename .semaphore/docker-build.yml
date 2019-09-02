@@ -5,7 +5,7 @@ agent:
   machine:
     # Use a machine type with more RAM and CPU power for faster container
     # builds:
-    type: e1-standard-4
+    type: e1-standard-2
     os_image: ubuntu1804
 
 blocks:
@@ -22,7 +22,7 @@ blocks:
       # For info on creating secrets, see:
       # https://docs.semaphoreci.com/article/66-environment-variables-and-secrets
       secrets:
-      - name: markoa-dockerhub
+      - name: dockerhub
 
       prologue:
         commands:
@@ -36,12 +36,12 @@ blocks:
 
           # Authenticate with Docker Hub
           # using environment variables markoa-dockerhub secret:
-          - echo $DOCKER_PASSWORD | docker login  --username "$DOCKER_USERNAME" --password-stdin
+          - echo "$DOCKER_PASSWORD" | docker login  --username "$DOCKER_USERNAME" --password-stdin
 
           # Use docker layer caching and reuse unchanged layers to build a new
           # container image faster.
           # To do that, we first need to pull a previous version of container:
-          - docker pull semaphoredemos/semaphore-demo-java-spring:latest || true
+          - docker pull "$DOCKER_USERNAME"/semaphore-demo-java-spring:latest || true
 
 
           # Build a new image based on pulled image, if present.
@@ -49,7 +49,7 @@ blocks:
           # produce a unique image tag.  For a list of available environment
           # variables on Semaphore, see:
           # https://docs.semaphoreci.com/article/12-environment-variables
-          - docker build --cache-from semaphoredemos/semaphore-demo-java-spring:latest --build-arg ENVIRONMENT="${ENVIRONMENT}" -t semaphoredemos/semaphore-demo-java-spring:latest .
+          - docker build --cache-from "$DOCKER_USERNAME"/semaphore-demo-java-spring:latest --build-arg ENVIRONMENT="${ENVIRONMENT}" -t "$DOCKER_USERNAME"/semaphore-demo-java-spring:latest .
 
           # Push a new image to container registry:
-          - docker push semaphoredemos/semaphore-demo-java-spring:latest
+          - docker push "$DOCKER_USERNAME"/semaphore-demo-java-spring:latest
