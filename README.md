@@ -3,6 +3,8 @@
 Example Spring Boot application and CI/CD pipeline showing how to run a Java
 project on [Semaphore 2.0](https://semaphoreci.com).
 
+**Note:** The `fork-and-run` branch contains simplified Semaphore configuration without the option to build and push Docker image. To see the full configuration please check the `master` branch.
+
 ## Application overview
 
 ### Features
@@ -40,32 +42,11 @@ project on [Semaphore 2.0](https://semaphoreci.com).
 The Semaphore pipeline is configured to:
 
   1. Build the project
-  2. Run tests
-  3. Build Docker image
-  4. Push image to `hub.docker.com`
+  2. Run unit and integration tests
+  3. Run perofrmance tests
 
 Semaphore pipeline configuration is located at
 [.semaphore/semaphore.yml](.semaphore/semaphore.yml)
-
-### Setting up
-
-To set up this pipeline on your Semaphore account:
-
-  1. If you don't have `sem` command line tool installed, do so using `curl
-     https://storage.googleapis.com/sem-cli-releases/get.sh | bash` and then
-     connect to your account using `sem connect <your
-     organisation>.semaphoreci.com <your private key>`. You can get the private
-     key from your account dashboard at `semaphoreci.com`.
-  2. Add the project to Semaphore using `sem init`.
-  3. This pipeline relies on public Docker repository to push artifacts of successful builds. Create an account on `https://hub.docker.com/` if you don't have one.
-  4. Add your `hub.docker.com` credentials to `./docker-hub-secret.yml`. The credentials should remain private, so don't publish them to your Git repository by mistake.
-  5. Add your `./docker-hub-secret.yml` credentials to Semaphore with `sem create -f docker-hub-secret.yml`
-  
-  
-After pushing a new commit to master, Semaphore will initiate a workflow:
-
-![alt text](assets/pipeline-result.png)
-
 
 ## Build configuration
 
@@ -96,6 +77,6 @@ To run performance tests
 
 ## License
 
-Copyright (c) 2019 Rendered Text
+Copyright (c) 2020 Rendered Text
 
 Distributed under the MIT License. See the file LICENSE.
