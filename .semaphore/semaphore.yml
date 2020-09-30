@@ -78,6 +78,7 @@ blocks:
         commands:
           - checkout
           - cache restore
+          - mvn -q package jmeter:configure -Dmaven.test.skip=true
       jobs:
       - name: Benchmark
         commands:
