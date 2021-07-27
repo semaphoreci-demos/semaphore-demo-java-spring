@@ -47,6 +47,8 @@ blocks:
             # to be used in next blocks and future workflows:
           - cache store
 
+
+
   - name: "Test"
     task:
       env_vars:
@@ -62,6 +64,12 @@ blocks:
           - cache restore
           - mvn -q test-compile -Dmaven.test.skip=true
       jobs:
+      - name: Lint
+        commands:
+          - sem-version java 11
+          - wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.41/checkstyle-8.41-all.jar
+          - git ls-files | grep -E '.java$' | java -jar checkstyle-8.41-all.jar -c /sun_checks.xml
+
       - name: Unit tests
         commands:
           - mvn test
