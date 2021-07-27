@@ -66,9 +66,10 @@ blocks:
       jobs:
       - name: Lint
         commands:
+          - cd src
           - sem-version java 11
           - wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.41/checkstyle-8.41-all.jar
-          - git ls-files | grep -E '.java$' | java -jar checkstyle-8.41-all.jar -c /sun_checks.xml
+          - git ls-files | grep -E '.java$' | java -jar checkstyle-8.41-all.jar -c /sun_checks.xml src/.
 
       - name: Unit tests
         commands:
