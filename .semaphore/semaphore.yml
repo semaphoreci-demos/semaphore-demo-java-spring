@@ -69,7 +69,7 @@ blocks:
           - cd src
           - sem-version java 11
           - wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.41/checkstyle-8.41-all.jar
-          - java -jar checkstyle-8.41-all.jar -c /sun_checks.xml src/
+          - java com.puppycrawl.tools.checkstyle.Main -c /sun_checks.xml src/
 
       - name: Unit tests
         commands:
