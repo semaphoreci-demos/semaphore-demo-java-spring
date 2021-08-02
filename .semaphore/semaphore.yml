@@ -68,7 +68,7 @@ blocks:
         commands:
             - sem-version java 11
             - wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.32/checkstyle-8.32-all.jar
-            - result=$(java -jar checkstyle-8.32-all.jar -c checkstyle.xml src/)
+            - result=$(java -jar checkstyle-8.32-all.jar -c /sun_checks.xml src/)
             # Cleanup following running checkstyle
             - rm checkstyle-8.32-all.jar
           # - sem-version java 11
