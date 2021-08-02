@@ -70,7 +70,7 @@ blocks:
             - wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.41checkstyle-8.41-all.jar
             - java -jar checkstyle-8.41-all.jar -c /sun_checks.xml src/
             # Cleanup following running checkstyle
-            - rm checkstyle-8.32-all.jar
+            - rm checkstyle-8.41-all.jar
           # - sem-version java 11
           # - checkout
           # - wget https://github.com/pmd/pmd/releases/download/pmd_releases%2F6.32.0/pmd-bin-6.32.0.zip
