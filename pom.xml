@@ -64,6 +64,11 @@
 			<version>3.8.0</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.puppycrawl.tools</groupId>
+			<artifactId>checkstyle</artifactId>
+			<version>8.45</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -95,6 +100,7 @@
 					<resultsDirectory>${project.basedir}/testResults/jmeter</resultsDirectory>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 
@@ -107,5 +113,16 @@
 			</properties>
 		</profile>
 	</profiles>
-
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<configLocation>checkstyle.xml</configLocation>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>
