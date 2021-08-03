@@ -67,10 +67,13 @@ blocks:
       - name: Lint
         commands:
             - sem-version java 11
-            - wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.41/checkstyle-8.41-all.jar
-            - java -jar checkstyle-8.41-all.jar -c /sun_checks.xml src/
+            - echo '5c57ae7cf68ccf9ae4f989b4cd71428ada22f7e983b3f3d9501c88799ae3e77f  checkstyle-8.45-all.jar' > checkstyle-8.45-all.jar.SHA256SUM
+            - wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45/checkstyle-8.45-all.jar
+            - sha256sum -c checkstyle-8.45-all.jar.SHA256SUM
+            - java -jar checkstyle-8.45-all.jar -c /google_checks.xml src/
+          
             # Cleanup following running checkstyle
-           # - rm checkstyle-8.41-all.jar
+           # - rm checkstyle-8.45-all.jar
           # - sem-version java 11
           # - checkout
           # - wget https://github.com/pmd/pmd/releases/download/pmd_releases%2F6.32.0/pmd-bin-6.32.0.zip
