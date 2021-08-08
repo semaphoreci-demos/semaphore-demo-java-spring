@@ -79,6 +79,7 @@ blocks:
           # - wget https://github.com/pmd/pmd/releases/download/pmd_releases%2F6.32.0/pmd-bin-6.32.0.zip
           # - unzip pmd-bin-6.32.0.zip
           # - ./pmd-bin-6.32.0/bin/run.sh pmd -d . -R rulesets/java/quickstart.xml -f text
+          
       - name: Unit tests
         commands:
           - mvn test
