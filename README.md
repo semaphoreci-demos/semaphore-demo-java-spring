@@ -1,5 +1,7 @@
 # Semaphore demo CI/CD pipeline using Java Spring
 
+[![Build Status](https://semaphore-demos.semaphoreci.com/badges/semaphore-demo-java-spring/branches/master.svg)](https://semaphore-demos.semaphoreci.com/projects/semaphore-demo-java-spring)
+
 Example Spring Boot application and CI/CD pipeline showing how to run a Java
 project on [Semaphore 2.0](https://semaphoreci.com).
 
