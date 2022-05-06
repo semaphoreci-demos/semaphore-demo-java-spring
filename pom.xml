@@ -77,23 +77,27 @@
 			<plugin>
 				<groupId>com.lazerycode.jmeter</groupId>
 				<artifactId>jmeter-maven-plugin</artifactId>
-				<version>2.6.0</version>
+				<version>3.5.0</version>
 				<executions>
+					<execution>
+						<id>configuration</id>
+						<goals>
+							<goal>configure</goal>
+						</goals>
+					</execution>
 					<execution>
 						<id>jmeter-tests</id>
 						<goals>
 							<goal>jmeter</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>jmeter-check-results</id>
+						<goals>
+							<goal>results</goal>
+						</goals>
+					</execution>
 				</executions>
-				<configuration>
-					<!--<remoteConfig>-->
-						<!--<startServersBeforeTests>true</startServersBeforeTests>-->
-						<!--<stopServersAfterTests>true</stopServersAfterTests>-->
-					<!--</remoteConfig>-->
-					<testFilesDirectory>${project.basedir}/src/main/resources/jmeter</testFilesDirectory>
-					<resultsDirectory>${project.basedir}/testResults/jmeter</resultsDirectory>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
