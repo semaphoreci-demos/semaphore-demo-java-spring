@@ -13,6 +13,7 @@ blocks:
       jobs:
         - name: Build
           commands:
+            - sem-version java 17
             - checkout
             - cache restore
             - 'mvn -q package jmeter:configure -Dmaven.test.skip=true'
@@ -24,6 +25,7 @@ blocks:
           value: '-Dmaven.repo.local=.m2'
       prologue:
         commands:
+          - sem-version java 17
           - checkout
           - cache restore
           - mvn -q test-compile -Dmaven.test.skip=true
@@ -41,6 +43,7 @@ blocks:
           value: '-Dmaven.repo.local=.m2'
       prologue:
         commands:
+          - sem-version java 17
           - checkout
           - cache restore
       jobs:

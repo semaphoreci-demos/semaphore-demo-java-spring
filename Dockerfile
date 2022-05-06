@@ -1,4 +1,4 @@
-FROM openjdk:18-jdk-alpine
+FROM openjdk:17-jdk-alpine
 ARG ENVIRONMENT
 ENV ENVIRONMENT ${ENVIRONMENT}
 COPY target/*.jar app.jar
