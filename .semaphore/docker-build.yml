@@ -27,3 +27,6 @@ blocks:
             - 'docker pull "$DOCKER_USERNAME"/semaphore-demo-java-spring:latest || true'
             - 'docker build --cache-from "$DOCKER_USERNAME"/semaphore-demo-java-spring:latest --build-arg ENVIRONMENT="${ENVIRONMENT}" -t "$DOCKER_USERNAME"/semaphore-demo-java-spring:latest .'
             - 'docker push "$DOCKER_USERNAME"/semaphore-demo-java-spring:latest'
+promotions:
+  - name: "Deploy \U0001F680"
+    pipeline_file: pipeline_3.yml
